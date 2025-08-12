@@ -323,8 +323,9 @@ export const YieldCalculator = () => {
                       </span>
                     </div>
                   </div>
-                </div>}
-            </div>
+                </div>
+              </div>
+            </div>}
           </div>
         </div>
       </div>
