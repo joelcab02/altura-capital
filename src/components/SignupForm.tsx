@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { User, Mail, Phone, Check, ChevronRight } from 'lucide-react';
+import { User, Mail, Phone, Check, ChevronRight, Loader2 } from 'lucide-react';
+import { submitLead } from '../services/leadService';
+
 export const SignupForm = () => {
   const [formState, setFormState] = useState({
     firstName: '',
@@ -8,6 +10,10 @@ export const SignupForm = () => {
     phone: '',
     acceptTerms: false
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       name,
@@ -19,11 +25,54 @@ export const SignupForm = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    
+    // Clear any previous messages when user starts typing
+    if (submitMessage) {
+      setSubmitMessage(null);
+    }
   };
-  const handleSubmit = (e: React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Form submission logic would go here
-    console.log('Form submitted:', formState);
+    setIsSubmitting(true);
+    setSubmitMessage(null);
+
+    try {
+      const result = await submitLead({
+        firstName: formState.firstName,
+        lastName: formState.lastName,
+        email: formState.email,
+        phone: formState.phone
+      });
+
+      if (result.success) {
+        setSubmitMessage({
+          type: 'success',
+          text: '¡Gracias! Te contactaremos pronto para comenzar tu prueba gratuita.'
+        });
+        
+        // Reset form after successful submission
+        setFormState({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          acceptTerms: false
+        });
+      } else {
+        setSubmitMessage({
+          type: 'error',
+          text: result.message || 'Error al enviar la información. Por favor, inténtalo de nuevo.'
+        });
+      }
+    } catch (error) {
+      setSubmitMessage({
+        type: 'error',
+        text: 'Error al enviar la información. Por favor, inténtalo de nuevo.'
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   return <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 transform translate-y-0 hover:translate-y-[-5px] transition-all duration-300">
       <div className="mb-6">
@@ -75,9 +124,32 @@ export const SignupForm = () => {
             .
           </label>
         </div>
-        <button type="submit" className="w-full btn-primary py-4 justify-center group">
-          <span>Probar Gratis Por 7 Días</span>
-          <ChevronRight size={18} className="ml-1 transition-transform group-hover:translate-x-1" />
+        {submitMessage && (
+          <div className={`p-4 rounded-lg mb-4 ${
+            submitMessage.type === 'success' 
+              ? 'bg-green-50 text-green-800 border border-green-200' 
+              : 'bg-red-50 text-red-800 border border-red-200'
+          }`}>
+            {submitMessage.text}
+          </div>
+        )}
+        
+        <button 
+          type="submit" 
+          disabled={isSubmitting || !formState.acceptTerms}
+          className="w-full btn-primary py-4 justify-center group disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 size={18} className="mr-2 animate-spin" />
+              <span>Enviando...</span>
+            </>
+          ) : (
+            <>
+              <span>Probar Gratis Por 7 Días</span>
+              <ChevronRight size={18} className="ml-1 transition-transform group-hover:translate-x-1" />
+            </>
+          )}
         </button>
       </form>
       <div className="mt-6 pt-6 border-t border-gray-100">
