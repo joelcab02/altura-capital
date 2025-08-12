@@ -36,6 +36,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // Check environment variables first
+    if (!process.env.CLOSE_API_KEY) {
+      console.error('Missing CLOSE_API_KEY environment variable');
+      return res.status(500).json({ 
+        error: 'Server configuration error',
+        details: 'Missing API key configuration'
+      });
+    }
+
     const { firstName, lastName, email, phone }: LeadData = req.body;
 
     // Validate required fields
@@ -92,11 +101,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!closeResponse.ok) {
       const errorData = await closeResponse.text();
-      console.error('Close CRM API Error:', errorData);
+      console.error('Close CRM API Error:', {
+        status: closeResponse.status,
+        statusText: closeResponse.statusText,
+        error: errorData,
+        apiKey: process.env.CLOSE_API_KEY ? 'Present' : 'Missing',
+        apiUrl: process.env.CLOSE_API_URL || 'Missing'
+      });
       
       return res.status(500).json({ 
         error: 'Failed to create lead in CRM',
-        details: process.env.NODE_ENV === 'development' ? errorData : undefined
+        status: closeResponse.status,
+        details: process.env.NODE_ENV === 'development' ? errorData : `HTTP ${closeResponse.status}: ${closeResponse.statusText}`
       });
     }
 
