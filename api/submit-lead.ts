@@ -14,9 +14,6 @@ interface CloseLeadPayload {
     emails: Array<{ email: string; type: string }>;
     phones: Array<{ phone: string; type: string }>;
   }>;
-  custom?: {
-    'cf_source': string;
-  };
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -73,27 +70,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           emails: [
             {
               email: email,
-              type: 'office'
+              type: 'work'
             }
           ],
           phones: [
             {
               phone: formattedPhone,
-              type: 'mobile'
+              type: 'work'
             }
           ]
         }
-      ],
-      custom: {
-        'cf_source': 'Website Form - Altura Capital'
-      }
+      ]
     };
 
     // Make request to Close CRM API
     const closeResponse = await fetch('https://api.close.com/api/v1/lead/', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.CLOSE_API_KEY}`,
+        'Authorization': `Basic ${Buffer.from(process.env.CLOSE_API_KEY + ':').toString('base64')}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(closePayload)
