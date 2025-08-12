@@ -47,13 +47,27 @@ export const Header = () => {
           </button>
           {/* Desktop navigation */}
           <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-            {menuItems.map((item, index) => <a key={index} href={item.href} className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-700 hover:bg-blue-50 transition-colors">
+            {menuItems.map((item, index) => (
+              <a
+                key={index}
+                href={item.href}
+                className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+              >
                 {item.name}
-              </a>)}
+              </a>
+            ))}
           </nav>
           {/* Desktop buttons */}
           <div className="hidden md:flex items-center space-x-3">
-            <button className="px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors">
+            <button
+              onClick={() =>
+                window.scrollTo({
+                  top: document.querySelector('#signup-form')?.offsetTop || 0,
+                  behavior: 'smooth'
+                })
+              }
+              className="px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors"
+            >
               Iniciar sesión
             </button>
             <Link to="/registro" className="btn-primary">

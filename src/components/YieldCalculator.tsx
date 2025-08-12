@@ -308,7 +308,10 @@ export const YieldCalculator = () => {
                     <h4 className="text-xl font-bold mb-6">
                       ¿Listo para hacerlo real?
                     </h4>
-                    <button className="btn-primary group">
+                    <button 
+                      onClick={() => window.scrollTo({ top: document.querySelector('#signup-form')?.offsetTop || 0, behavior: 'smooth' })}
+                      className="btn-primary group"
+                    >
                       <span>Invertir ahora</span>
                       <ArrowRight className="ml-2 transition-transform group-hover:translate-x-1" size={20} />
                     </button>
@@ -325,5 +328,6 @@ export const YieldCalculator = () => {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };

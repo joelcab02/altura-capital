@@ -31,10 +31,13 @@ export const HeroSection = () => {
               </p>
             </div>
             <div className="flex flex-wrap gap-4 mb-12">
-              <a href="#calculadora" className="btn-primary">
-                Calcular mi rendimiento
+              <button 
+                onClick={() => window.scrollTo({ top: document.querySelector('#signup-form')?.offsetTop || 0, behavior: 'smooth' })}
+                className="btn-primary"
+              >
+                Empezar ahora
                 <ChevronRight size={18} className="ml-1" />
-              </a>
+              </button>
               <a href="#como-funciona" className="btn-secondary">
                 Cómo funciona
               </a>

@@ -41,8 +41,11 @@ export const HowItWorksSection = () => {
             </div>)}
         </div>
         <div className="mt-16 text-center">
-          <button className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full text-lg font-medium hover:from-blue-600 hover:to-blue-800 transition-colors">
-            Probar Gratis Por 7 Días
+          <button 
+            onClick={() => window.scrollTo({ top: document.querySelector('#signup-form')?.offsetTop || 0, behavior: 'smooth' })}
+            className="px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-full text-lg font-medium hover:from-blue-600 hover:to-blue-800 transition-colors"
+          >
+            Comenzar ahora
           </button>
           <p className="mt-4 text-gray-500">
             Sin compromiso a largo plazo, cancela cuando quieras

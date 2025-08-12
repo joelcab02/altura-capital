@@ -74,7 +74,7 @@ export const SignupForm = () => {
       setIsSubmitting(false);
     }
   };
-  return <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 transform translate-y-0 hover:translate-y-[-5px] transition-all duration-300">
+  return <div id="signup-form" className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 transform translate-y-0 hover:translate-y-[-5px] transition-all duration-300">
       <div className="mb-6">
         <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
           Comienza ahora
