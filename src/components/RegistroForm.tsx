@@ -64,10 +64,22 @@ export const RegistroForm = ({
     if (Object.values(newErrors).some(error => error !== '')) {
       return;
     }
+    // Track lead conversion with Meta Pixel
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'Lead', {
+        content_name: 'Registration Form',
+        content_category: 'User Registration',
+        value: 0.00,
+        currency: 'MXN'
+      });
+    }
+
     // Enviar el formulario
     onSubmit(formState);
   };
-  return <div id="registro-form" className="bg-white rounded-lg shadow-sm border border-gray-100 p-8">
+
+  return (
+    <div id="registro-form" className="bg-white rounded-lg shadow-sm border border-gray-100 p-8">
       <h2 className="text-4xl font-bold text-gray-800 mb-2">Comienza ahora</h2>
       <p className="text-gray-600 mb-8">
         Inicia tu camino hacia la libertad financiera en menos de 60 segundos
@@ -128,5 +140,6 @@ export const RegistroForm = ({
           </svg>
         </button>
       </form>
-    </div>;
+    </div>
+  );
 };

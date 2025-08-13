@@ -46,6 +46,16 @@ export const SignupForm = () => {
       });
 
       if (result.success) {
+        // Track lead conversion with Meta Pixel
+        if (typeof window !== 'undefined' && window.fbq) {
+          window.fbq('track', 'Lead', {
+            content_name: 'Newsletter Signup',
+            content_category: 'Lead Generation',
+            value: 0.00,
+            currency: 'MXN'
+          });
+        }
+        
         setSubmitMessage({
           type: 'success',
           text: '¡Gracias! Te contactaremos pronto para comenzar tu prueba gratuita.'
